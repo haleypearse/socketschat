@@ -9,7 +9,9 @@
   "author": "me",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "socket-io": "^1.0.0",
+    "socket.io": "^2.2.0"
   },
   "devDependencies": {
     "devmon": "0.0.1"
