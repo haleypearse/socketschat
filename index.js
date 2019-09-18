@@ -20,10 +20,12 @@ io.on("connection", socket => {
 
   // handle chat event
   socket.on("chat", data => {
+    console.log("socket.on chat");
     io.sockets.emit("chat", data);
   });
 
   socket.on("typing", data => {
+    console.log("socket.on typing");
     socket.broadcast.emit("typing", data); //emit to every other client
   });
 });

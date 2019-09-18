@@ -10,25 +10,43 @@ var button = document.getElementById("send");
 var output = document.getElementById("output");
 var feedback = document.getElementById("feedback");
 
-//emit events
-button.addEventListener("click", function() {
+var emitchat = () => {
   socket.emit("chat", {
     message: message.value,
     handle: handle.value
   });
+  message.value = "";
+};
+
+//emit events
+button.addEventListener("click", () => {
+  if (message.value != "") {
+    emitchat();
+  }
 });
 
-message.addEventListener("keypress", function() {
-  socket.emit("typing", handle.value);
+message.addEventListener("keyup", e => {
+  console.log("message keyup" + e.keyCode);
+  if (e.keyCode == 13) {
+    emitchat();
+  } // enter key
+  socket.emit("typing", {
+    handle: handle.value,
+    messageisempty: message.value == ""
+  });
 });
 
 //listen for events
-socket.on("chat", function(data) {
+socket.on("chat", data => {
+  console.log("socket.on chat");
   output.innerHTML +=
     "<p><strong>" + data.handle + " </strong>" + data.message + "</p>";
 });
 
-socket.on("typing", function(data) {
-  feedback.innerHTML =
-    "<p><em>" + data + " is typing a message..." + "</em></p>";
+socket.on("typing", data => {
+  console.log("socket.on typing");
+  feedback.innerHTML = data.messageisempty // show "is typing" and remove when deleted
+    ? ""
+    : "<p><em>" + data.handle + " is typing a message..." + "</em></p>";
+  console.log("data.messageisempty = " + data.messageisempty);
 });
