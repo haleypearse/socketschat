@@ -1,27 +1,29 @@
 var express = require("express");
 var socket = require("socket.io");
 
-//App setup
+// App setup
 var app = express();
-var server = app.listen(4000, function() {
+var server = app.listen(4000, () => {
   console.log("listening to requests on port 4000");
 });
 
-//Static files
+// Static files, middleware serving public folder
 app.use(express.static("public"));
 
-//Socket setup
+// Socket setup
+// Pass express to socket
 var io = socket(server);
 
-io.on("connection", function(socket) {
-  console.log("made socket connection", socket.id);
+io.on("connection", socket => {
+  //socket variable is specific to client
+  console.log("made socket connection with id<<<< ", socket.id);
 
-  //handle chat event
-  socket.on("chat", function(data) {
+  // handle chat event
+  socket.on("chat", data => {
     io.sockets.emit("chat", data);
   });
 
-  socket.on("typing", function(data) {
-    socket.broadcast.emit("typing", data);
+  socket.on("typing", data => {
+    socket.broadcast.emit("typing", data); //emit to every other client
   });
 });

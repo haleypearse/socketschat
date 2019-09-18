@@ -1,4 +1,6 @@
-//make connection
+// script loaded by client via html
+
+//make connection using io loaded from cdn
 var socket = io.connect("http://localhost:4000");
 
 //query DOM
